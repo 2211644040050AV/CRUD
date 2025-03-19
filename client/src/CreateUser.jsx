@@ -14,6 +14,7 @@ export default function CreateUser() {
       .post("http://localhost:3000/createUser", { name, age, email })
       .then((res) => {
         console.log(res);
+        alert("User created successfully!");
         navigate("/");
       })
       .catch((err) => {

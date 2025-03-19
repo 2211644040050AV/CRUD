@@ -7,12 +7,23 @@ export default function Users() {
 
   useEffect(() => {
     // Fetch all users from the server
-    axios.get("http://localhost:3000").then((res) => {
-      setUsers(res.data).catch((err) => console.log(err));
-    });
+    axios.get("http://localhost:3000")
+    .then((res) => setUsers(res.data))
+    .catch((err) => console.log(err));
   }, []);
 
-  return (
+  const handleDelete = (id) => {
+    // Delete a user from the server
+    axios.delete(`http://localhost:3000/deleteUser/`+id)
+    .then((res) => {
+      alert("User deleted successfully!");
+      setUsers(Users.filter((user) => user._id !== id))
+      window.location.reload();
+    })
+    .catch((err) => console.log(err));
+  }
+
+  return (  
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center">
       <div className="w-80 bg-white rounded p-3">
         <Link to="/create" className="btn btn-success">Add</Link>
@@ -32,8 +43,9 @@ export default function Users() {
                 <td>{user.age}</td>
                 <td>{user.email}</td>
                 <td>
-                <Link to="/update" className="btn btn-primary">Update</Link>
-                <button className="btn btn-danger">Delete</button>
+                <Link to={`/update/${user._id}`} className="btn btn-primary">Update</Link> 
+                  <button className="btn btn-danger"
+                  onClick={(e) => handleDelete(user._id)}>Delete</button>
                 </td>
               </tr>
             ))}
